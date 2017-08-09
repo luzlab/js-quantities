@@ -1,19 +1,10 @@
 import Qty from "./constructor.js";
-import EJSON from "ejon";
+import EJSON from "ejson";
 import { assign } from "./utils.js";
 
-// import { ensureDependencies, checkMeteor, getGlobal } from 'meteor-globals'
-
-
-// if (checkMeteor()) {
-
-// }
-
 const ejson_type = 'js-quantity'
-
 if (typeof EJSON !== 'undefined') {
     EJSON.addType(ejson_type, Qty);
-
     assign(Qty.prototype, {
         typeName() {
             return ejson_type

@@ -21,11 +21,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.Qty = factory());
-}(this, (function () { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('ejson')) :
+	typeof define === 'function' && define.amd ? define(['ejson'], factory) :
+	(global.Qty = factory(global['']['']['/']['']['/ejson']));
+}(this, (function (EJSON) { 'use strict';
+
+EJSON = EJSON && EJSON.hasOwnProperty('default') ? EJSON['default'] : EJSON;
 
 /**
  * Tests if a value is a Qty instance
@@ -660,7 +663,9 @@ var QTY_STRING = "(" + SIGNED_NUMBER + ")?" + "\\s*([^/]*)(?:\/(.+))?";
 var QTY_STRING_REGEX = new RegExp("^" + QTY_STRING + "$");
 
 var POWER_OP = "\\^|\\*{2}";
-var SAFE_POWER = "[01234]"; // scalar, length, area, volume; 4 is for SI base unit form of lux
+// Allow unit powers representing scalar, length, area, volume; 4 is for some
+// special case representations in SI base units.
+var SAFE_POWER = "[01234]";
 var TOP_REGEX = new RegExp ("([^ \\*\\d]+?)(?:" + POWER_OP + ")?(-?" + SAFE_POWER + "(?![a-zA-Z]))");
 var BOTTOM_REGEX = new RegExp("([^ \\*\\d]+?)(?:" + POWER_OP + ")?(" + SAFE_POWER + "(?![a-zA-Z]))");
 
@@ -1990,6 +1995,37 @@ function simplify (units) {
   return unitCounts.map(function(unitCount) {
     return unitCount[0] + (unitCount[1] > 1 ? unitCount[1] : "");
   });
+}
+
+const ejson_type = 'js-quantity';
+if (typeof EJSON !== 'undefined') {
+    EJSON.addType(ejson_type, Qty$1);
+    assign(Qty$1.prototype, {
+        typeName() {
+            return ejson_type
+        },
+
+        toJSONValue() {
+            let object_definition = {
+                scalar: this.scalar,
+                numerator: this.numerator,
+                denominator: this.denominator
+            };
+            return object_definition;
+        },
+
+        clone() {
+            return new Qty$1(this);
+        },
+
+        equals(other) {
+            if (this.isCompatible(other)) {
+                return this.eq(other);
+            } else {
+                return false;
+            }
+        }
+    });
 }
 
 Qty$1.version = "1.6.6";

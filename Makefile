@@ -7,11 +7,7 @@ BANNER := $(shell cat LICENSE)
 build: $(DISTFILE)
 
 $(DISTFILE): $(SOURCES)
-	rollup --output=$(DISTFILE) \
-         --format=umd \
-         --name=Qty \
-         --banner="`echo '/*'; cat LICENSE; echo '*/'`" \
-         src/quantities.js
+	rollup -c ./rollup.config.js
 
 test: build
 	jasmine-node $(SPEC_DIR)
