@@ -1,8 +1,9 @@
 import Qty from "./constructor.js";
-import EJSON from "ejson";
 import { assign } from "./utils.js";
+try { const EJSON =require("ejson") } catch (e) {}
 
 const ejson_type = 'js-quantity'
+
 if (typeof EJSON !== 'undefined') {
     EJSON.addType(ejson_type, Qty);
     assign(Qty.prototype, {

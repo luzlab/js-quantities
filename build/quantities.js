@@ -23,12 +23,10 @@ SOFTWARE.
 */
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('ejson')) :
-	typeof define === 'function' && define.amd ? define(['ejson'], factory) :
-	(global.Qty = factory(global['']['']['/']['']['/ejson']));
-}(this, (function (EJSON) { 'use strict';
-
-EJSON = EJSON && EJSON.hasOwnProperty('default') ? EJSON['default'] : EJSON;
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global.Qty = factory());
+}(this, (function () { 'use strict';
 
 /**
  * Tests if a value is a Qty instance
@@ -1996,6 +1994,8 @@ function simplify (units) {
     return unitCount[0] + (unitCount[1] > 1 ? unitCount[1] : "");
   });
 }
+
+try { const EJSON =require("ejson"); } catch (e) {}
 
 const ejson_type = 'js-quantity';
 if (typeof EJSON !== 'undefined') {
