@@ -1995,21 +1995,20 @@ function simplify (units) {
   });
 }
 
-try { const EJSON =require("ejson"); } catch (e) {}
-
 const ejson_type = 'js-quantity';
-if (typeof EJSON !== 'undefined') {
-    EJSON.addType(ejson_type, Qty$1);
+
+try {
+    const EJSON = require('ejson');
     assign(Qty$1.prototype, {
         typeName() {
-            return ejson_type
+            return ejson_type;
         },
 
         toJSONValue() {
             let object_definition = {
                 scalar: this.scalar,
                 numerator: this.numerator,
-                denominator: this.denominator
+                denominator: this.denominator,
             };
             return object_definition;
         },
@@ -2024,8 +2023,11 @@ if (typeof EJSON !== 'undefined') {
             } else {
                 return false;
             }
-        }
+        },
     });
+    EJSON.addType(ejson_type, Qty$1);
+} catch (e) {
+    // EJSON not found. Skip installing support.
 }
 
 Qty$1.version = "1.6.6";
