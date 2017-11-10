@@ -1930,6 +1930,8 @@ assign(Qty$1.prototype, {
   }
 });
 
+Qty$1.prototype.inspect = Qty$1.prototype.toString;
+
 var stringifiedUnitsCache = new NestedMap();
 /**
  * Returns a string representing a normalized unit array

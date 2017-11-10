@@ -135,6 +135,8 @@ assign(Qty.prototype, {
   }
 });
 
+Qty.prototype.inspect = Qty.prototype.toString;
+
 var stringifiedUnitsCache = new NestedMap();
 /**
  * Returns a string representing a normalized unit array
